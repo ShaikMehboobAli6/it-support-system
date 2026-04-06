@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Log Analysis</title>
+</head>
+<body>
+    <h1>Log Summary</h1>
+
+    <ul>
+        {% for key, value in summary.items() %}
+            <li>{{ key }}: {{ value }}</li>
+        {% endfor %}
+    </ul>
+
+    <br>
+    <a href="/">Back to Home</a>
+</body>
+</html>

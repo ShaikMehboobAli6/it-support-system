@@ -1,0 +1,5 @@
+2025-01-01 ERROR Disk full
+2025-01-01 INFO System running
+2025-01-01 ERROR CPU overload
+2025-01-02 WARNING High memory usage
+2025-01-02 ERROR Disk full
