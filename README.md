@@ -29,8 +29,10 @@ It is designed to demonstrate practical IT support workflows used in real organi
 
 ## 📸 Screenshots
 
-(Add screenshots here later)
-
+[Home screen webpage](Home page.png)
+[Log screen](Logs page.png)
+[Creating Tickets](Create ticket.png)
+[Fixing Issue button](Fix issue.png)
 ---
 
 ## ▶️ How to Run
@@ -38,3 +40,4 @@ It is designed to demonstrate practical IT support workflows used in real organi
 ```bash
 pip install flask pandas psutil
 python app.py
+
