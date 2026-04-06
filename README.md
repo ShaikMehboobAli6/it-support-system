@@ -1,31 +1,40 @@
-# Enterprise IT Support Simulation System
+# 🚀 Enterprise IT Support Simulation System
 
-## Overview
-This project simulates real-world IT support operations including incident management, system monitoring, diagnostics, and automated issue resolution.
+## 📌 Overview
+This project simulates real-world IT support operations, including ticket management, system monitoring, automated diagnostics, and incident resolution.
 
-## Features
-- Ticket Management System (ITSM simulation)
-- Automated Diagnostics (CPU, Memory, Disk usage)
-- Real-time Monitoring Dashboard
-- Auto-Healing (System cleanup simulation)
-- Log Analysis using Pandas
+It is designed to demonstrate practical IT support workflows used in real organizations.
 
-## Technologies Used
+---
+
+## ⚙️ Features
+
+- 🎫 Ticket Management System (ITSM simulation)
+- 🧠 Automated Diagnostics (CPU, Memory, Disk usage)
+- 📊 Real-time Monitoring Dashboard
+- 🔧 Auto-Healing (System cleanup simulation)
+- 📂 Log Analysis using Pandas
+
+---
+
+## 🛠️ Tech Stack
+
 - Python
 - Flask
 - SQLite
 - Pandas
 - psutil
 
-## How to Run
-1. Install dependencies:
-   pip install flask pandas psutil
+---
 
-2. Run the application:
-   python app.py
+## 📸 Screenshots
 
-3. Open in browser:
-   http://127.0.0.1:5000/
+(Add screenshots here later)
 
-## Purpose
-This project demonstrates practical IT support workflows including troubleshooting, monitoring, incident handling, and automation.
+---
+
+## ▶️ How to Run
+
+```bash
+pip install flask pandas psutil
+python app.py
