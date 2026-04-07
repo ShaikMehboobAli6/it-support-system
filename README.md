@@ -29,10 +29,10 @@ It is designed to demonstrate practical IT support workflows used in real organi
 
 ## 📸 Screenshots
 
-![Home screen webpage](your-Home page.png)
-![Log screen](your-Logs page.png)
-![Creating Tickets](your-Create ticket.png)
-![Fixing Issue button](your-Fix issue.png)
+![Home screen webpage](https://github.com/ShaikMehboobAli6/it-support-system/blob/main/Home%20page.png)
+![Log screen](https://github.com/ShaikMehboobAli6/it-support-system/blob/main/Logs%20page.png)
+![Creating Tickets](https://github.com/ShaikMehboobAli6/it-support-system/blob/main/Create%20ticket.png)
+![Fixing Issue button](https://github.com/ShaikMehboobAli6/it-support-system/blob/main/Fix%20issue.png)
 ---
 
 ## ▶️ How to Run in terminal
