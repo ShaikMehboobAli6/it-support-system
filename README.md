@@ -29,13 +29,13 @@ It is designed to demonstrate practical IT support workflows used in real organi
 
 ## 📸 Screenshots
 
-[Home screen webpage](Home page.png)
-[Log screen](Logs page.png)
-[Creating Tickets](Create ticket.png)
-[Fixing Issue button](Fix issue.png)
+![Home screen webpage](your-Home page.png)
+![Log screen](your-Logs page.png)
+![Creating Tickets](your-Create ticket.png)
+![Fixing Issue button](your-Fix issue.png)
 ---
 
-## ▶️ How to Run
+## ▶️ How to Run in terminal
 
 ```bash
 pip install flask pandas psutil
