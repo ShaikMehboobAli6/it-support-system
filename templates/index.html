@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>IT Support System</title>
+    <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -10,51 +10,76 @@
 <div class="flex">
 
     <!-- Sidebar -->
-    <div class="w-64 h-screen bg-gray-800 p-5">
-        <h2 class="text-xl font-bold mb-6">IT System</h2>
+    <div class="w-64 h-screen bg-gray-800 p-6">
+        <h2 class="text-2xl font-bold mb-8">IT System</h2>
 
-        <a href="/" class="block mb-3 hover:text-blue-400">Dashboard</a>
+        <a href="/" class="block mb-3 text-blue-400">Dashboard</a>
         <a href="/create" class="block mb-3 hover:text-blue-400">Create Ticket</a>
         <a href="/monitor" class="block mb-3 hover:text-blue-400">Monitor</a>
-        <a href="/logs" class="block hover:text-blue-400">Logs</a>
+        <a href="/logs" class="block mb-3 hover:text-blue-400">Logs</a>
     </div>
 
-    <!-- Main Content -->
-    <div class="flex-1 p-6">
+    <!-- Main -->
+    <div class="flex-1 p-8">
 
         <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
 
-        <!-- Tickets -->
-        <div class="grid gap-4">
-            {% for ticket in tickets %}
-            <div class="bg-gray-800 p-5 rounded-xl shadow-lg border border-gray-700">
+        <!-- Search -->
+        <form action="/search" method="get" class="mb-6">
+            <input name="q" placeholder="Search tickets..."
+                   class="px-4 py-2 rounded text-black w-64">
+        </form>
 
-                <div class="flex justify-between">
+        <!-- Tickets -->
+        <div class="space-y-4">
+
+            {% for ticket in tickets %}
+            <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
+
+                <div class="flex justify-between items-center">
                     <h3 class="text-lg font-semibold">
                         {{ ticket['issue_type'] }}
                     </h3>
 
-                    <span class="
+                    <div class="flex gap-2">
+                        <span class="
                         px-3 py-1 rounded text-sm
                         {% if ticket['priority'] == 'High' %} bg-red-500
                         {% elif ticket['priority'] == 'Medium' %} bg-yellow-500
                         {% else %} bg-green-500
                         {% endif %}
-                    ">
+                        ">
                         {{ ticket['priority'] }}
-                    </span>
+                        </span>
+
+                        <span class="
+                        px-3 py-1 rounded text-sm
+                        {% if ticket['status'] == 'Closed' %} bg-gray-500
+                        {% else %} bg-green-600
+                        {% endif %}
+                        ">
+                        {{ ticket['status'] }}
+                        </span>
+                    </div>
                 </div>
 
                 <p class="text-gray-300 mt-2">
                     {{ ticket['description'] }}
                 </p>
 
-                <p class="text-sm text-gray-400 mt-3">
+                <p class="text-sm text-gray-400 mt-2">
                     Diagnosis: {{ ticket['diagnosis'] }}
                 </p>
 
+                {% if ticket['status'] != 'Closed' %}
+                <a href="/close/{{ ticket['id'] }}" class="text-red-400 text-sm mt-2 inline-block">
+                    Mark as Closed
+                </a>
+                {% endif %}
+
             </div>
             {% endfor %}
+
         </div>
 
     </div>

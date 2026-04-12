@@ -1,17 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>System Monitoring</title>
-    <meta http-equiv="refresh" content="5">
+    <title>Monitor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
-    <h1>System Monitoring Dashboard</h1>
 
-    <p><strong>CPU Usage:</strong> {{ cpu }}%</p>
-    <p><strong>Memory Usage:</strong> {{ memory }}%</p>
-    <p><strong>Disk Usage:</strong> {{ disk }}%</p>
+<body class="bg-gray-900 text-white">
 
-    <br>
-    <a href="/">Back to Tickets</a>
+<div class="p-10">
+    <h1 class="text-2xl mb-6">System Monitor</h1>
+
+    <canvas id="chart"></canvas>
+</div>
+
+<script>
+const ctx = document.getElementById('chart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['CPU', 'Memory', 'Disk'],
+        datasets: [{
+            label: 'Usage %',
+            data: [{{ cpu }}, {{ memory }}, {{ disk }}]
+        }]
+    }
+});
+</script>
+
 </body>
 </html>

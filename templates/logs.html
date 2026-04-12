@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Log Analysis</title>
+    <title>Logs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Log Summary</h1>
 
-    <ul>
-        {% for key, value in summary.items() %}
-            <li>{{ key }}: {{ value }}</li>
-        {% endfor %}
-    </ul>
+<body class="bg-gray-900 text-white">
 
-    <br>
-    <a href="/">Back to Home</a>
+<div class="p-10">
+    <h1 class="text-2xl mb-6">Logs Summary</h1>
+
+    {% for key, value in summary.items() %}
+        <p>{{ key }} : {{ value }}</p>
+    {% endfor %}
+
+</div>
+
 </body>
 </html>
