@@ -2,33 +2,34 @@
 <html>
 <head>
     <title>IT Support System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Tickets</h1>
 
-    <a href="/create">Create Ticket</a>
+<body class="bg-dark text-light">
 
-    <ul>
-        {% for ticket in tickets %}
-            <li>
-                [{{ ticket['priority'] }}] 
-                {{ ticket['issue_type'] }} - 
-                {{ ticket['description'] }}
+<div class="container mt-5">
+
+    <h1 class="mb-4">IT Support Dashboard</h1>
+
+    <a href="/create" class="btn btn-primary mb-3">+ Create Ticket</a>
+    <a href="/monitor" class="btn btn-info mb-3">System Monitor</a>
+    <a href="/logs" class="btn btn-warning mb-3">View Logs</a>
+
+    <div class="card bg-secondary p-3 mt-3">
+        <h4>Tickets</h4>
+        <ul class="list-group">
+            {% for ticket in tickets %}
+            <li class="list-group-item bg-dark text-light">
+                <strong>[{{ ticket['priority'] }}]</strong>
+                {{ ticket['issue_type'] }} - {{ ticket['description'] }}
                 <br>
-                <strong>Diagnosis:</strong> {{ ticket['diagnosis'] }}
+                <small>Diagnosis: {{ ticket['diagnosis'] }}</small>
             </li>
-        {% endfor %}
-    </ul>
+            {% endfor %}
+        </ul>
+    </div>
 
-    <!-- ADD BUTTON HERE -->
-    <br>
-    <a href="/fix">
-        <button>Fix Issues</button>
-    </a>
-    <br>
-    <a href="/logs">
-    <button>View Logs</button>
-    </a>
+</div>
 
 </body>
 </html>
