@@ -1,89 +1,115 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard</title>
+    <title>IT Support System</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-900 text-white">
+<body class="bg-gray-950 text-white">
 
-<div class="flex">
-
-    <!-- Sidebar -->
-    <div class="w-64 h-screen bg-gray-800 p-6">
+<div class="flex min-h-screen">
+    <aside class="w-64 bg-gray-900 border-r border-gray-800 p-6">
         <h2 class="text-2xl font-bold mb-8">IT System</h2>
 
-        <a href="/" class="block mb-3 text-blue-400">Dashboard</a>
-        <a href="/create" class="block mb-3 hover:text-blue-400">Create Ticket</a>
-        <a href="/monitor" class="block mb-3 hover:text-blue-400">Monitor</a>
-        <a href="/logs" class="block mb-3 hover:text-blue-400">Logs</a>
-    </div>
+        <nav class="space-y-3 text-sm">
+            <a href="/" class="block text-blue-400 font-semibold">Dashboard</a>
+            <a href="/create" class="block hover:text-blue-400">Create Ticket</a>
+            <a href="/monitor" class="block hover:text-blue-400">Monitor</a>
+            <a href="/logs" class="block hover:text-blue-400">Logs</a>
+            <a href="/cleanup" class="block hover:text-red-400">Cleanup Cache</a>
+        </nav>
+    </aside>
 
-    <!-- Main -->
-    <div class="flex-1 p-8">
+    <main class="flex-1 p-8">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-3xl font-bold">Dashboard</h1>
+                <p class="text-gray-400 mt-1">Ticket management and system support overview</p>
+            </div>
+            <a href="/create" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium">
+                + Create Ticket
+            </a>
+        </div>
 
-        <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <p class="text-gray-400 text-sm">Total Tickets</p>
+                <p class="text-3xl font-bold mt-2">{{ tickets|length }}</p>
+            </div>
 
-        <!-- Search -->
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <p class="text-gray-400 text-sm">Open Tickets</p>
+                <p class="text-3xl font-bold mt-2 text-yellow-400">
+                    {{ tickets | selectattr('status', 'equalto', 'Open') | list | length }}
+                </p>
+            </div>
+
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <p class="text-gray-400 text-sm">Closed Tickets</p>
+                <p class="text-3xl font-bold mt-2 text-green-400">
+                    {{ tickets | selectattr('status', 'equalto', 'Closed') | list | length }}
+                </p>
+            </div>
+        </div>
+
         <form action="/search" method="get" class="mb-6">
-            <input name="q" placeholder="Search tickets..."
-                   class="px-4 py-2 rounded text-black w-64">
+            <input
+                name="q"
+                value="{{ query if query else '' }}"
+                placeholder="Search tickets..."
+                class="w-full md:w-96 px-4 py-3 rounded-xl bg-gray-900 border border-gray-700 text-white outline-none focus:border-blue-500"
+            >
         </form>
 
-        <!-- Tickets -->
         <div class="space-y-4">
-
             {% for ticket in tickets %}
-            <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-lg">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                    <div>
+                        <h3 class="text-xl font-semibold">{{ ticket['issue_type'] }}</h3>
+                        <p class="text-gray-400 text-sm mt-1">{{ ticket['description'] }}</p>
+                    </div>
 
-                <div class="flex justify-between items-center">
-                    <h3 class="text-lg font-semibold">
-                        {{ ticket['issue_type'] }}
-                    </h3>
-
-                    <div class="flex gap-2">
+                    <div class="flex gap-2 items-center">
                         <span class="
-                        px-3 py-1 rounded text-sm
-                        {% if ticket['priority'] == 'High' %} bg-red-500
-                        {% elif ticket['priority'] == 'Medium' %} bg-yellow-500
-                        {% else %} bg-green-500
-                        {% endif %}
+                            px-3 py-1 rounded-full text-xs font-semibold
+                            {% if ticket['priority'] == 'High' %} bg-red-600
+                            {% elif ticket['priority'] == 'Medium' %} bg-yellow-500 text-black
+                            {% else %} bg-green-600
+                            {% endif %}
                         ">
-                        {{ ticket['priority'] }}
+                            {{ ticket['priority'] }}
                         </span>
 
                         <span class="
-                        px-3 py-1 rounded text-sm
-                        {% if ticket['status'] == 'Closed' %} bg-gray-500
-                        {% else %} bg-green-600
-                        {% endif %}
+                            px-3 py-1 rounded-full text-xs font-semibold
+                            {% if ticket['status'] == 'Closed' %} bg-gray-600
+                            {% else %} bg-emerald-600
+                            {% endif %}
                         ">
-                        {{ ticket['status'] }}
+                            {{ ticket['status'] }}
                         </span>
                     </div>
                 </div>
 
-                <p class="text-gray-300 mt-2">
-                    {{ ticket['description'] }}
-                </p>
+                <div class="mt-4 text-sm text-gray-300">
+                    <p><span class="text-gray-500">Diagnosis:</span> {{ ticket['diagnosis'] }}</p>
+                </div>
 
-                <p class="text-sm text-gray-400 mt-2">
-                    Diagnosis: {{ ticket['diagnosis'] }}
-                </p>
-
-                {% if ticket['status'] != 'Closed' %}
-                <a href="/close/{{ ticket['id'] }}" class="text-red-400 text-sm mt-2 inline-block">
-                    Mark as Closed
-                </a>
-                {% endif %}
-
+                <div class="mt-4 flex flex-wrap gap-3">
+                    {% if ticket['status'] != 'Closed' %}
+                    <a href="/fix/{{ ticket['id'] }}" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-medium">
+                        Fix Issue
+                    </a>
+                    <a href="/close/{{ ticket['id'] }}" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm font-medium">
+                        Mark Closed
+                    </a>
+                    {% endif %}
+                </div>
             </div>
             {% endfor %}
-
         </div>
-
-    </div>
-
+    </main>
 </div>
 
 </body>

@@ -5,16 +5,70 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-900 text-white">
+<body class="bg-gray-950 text-white">
+<div class="flex min-h-screen">
+    <aside class="w-64 bg-gray-900 border-r border-gray-800 p-6">
+        <h2 class="text-2xl font-bold mb-8">IT System</h2>
 
-<div class="p-10">
-    <h1 class="text-2xl mb-6">Logs Summary</h1>
+        <nav class="space-y-3 text-sm">
+            <a href="/" class="block hover:text-blue-400">Dashboard</a>
+            <a href="/create" class="block hover:text-blue-400">Create Ticket</a>
+            <a href="/monitor" class="block hover:text-blue-400">Monitor</a>
+            <a href="/logs" class="block text-blue-400 font-semibold">Logs</a>
+        </nav>
+    </aside>
 
-    {% for key, value in summary.items() %}
-        <p>{{ key }} : {{ value }}</p>
-    {% endfor %}
+    <main class="flex-1 p-8">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-3xl font-bold">Log Analysis</h1>
+                <p class="text-gray-400 mt-1">Error summary and log records</p>
+            </div>
+            <a href="/cleanup" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-medium">
+                Cleanup Cache
+            </a>
+        </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <p class="text-gray-400 text-sm">INFO</p>
+                <p class="text-3xl font-bold mt-2">{{ summary.INFO }}</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <p class="text-gray-400 text-sm">WARNING</p>
+                <p class="text-3xl font-bold mt-2 text-yellow-400">{{ summary.WARNING }}</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <p class="text-gray-400 text-sm">ERROR</p>
+                <p class="text-3xl font-bold mt-2 text-red-400">{{ summary.ERROR }}</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+            <h2 class="text-xl font-semibold mb-4">Log Records</h2>
+
+            <div class="space-y-3">
+                {% for log in logs %}
+                <div class="bg-gray-800 rounded-xl p-4 flex items-center justify-between gap-4">
+                    <div>
+                        <p class="text-sm text-gray-400">{{ log.date }}</p>
+                        <p class="font-semibold">{{ log.message }}</p>
+                    </div>
+
+                    <span class="
+                        px-3 py-1 rounded-full text-xs font-semibold
+                        {% if log.level == 'ERROR' %} bg-red-600
+                        {% elif log.level == 'WARNING' %} bg-yellow-500 text-black
+                        {% else %} bg-green-600
+                        {% endif %}
+                    ">
+                        {{ log.level }}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
 </div>
-
 </body>
 </html>

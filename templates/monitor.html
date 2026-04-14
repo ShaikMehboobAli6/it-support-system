@@ -1,33 +1,129 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Monitor</title>
+    <title>System Monitor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body class="bg-gray-900 text-white">
+<body class="bg-gray-950 text-white">
+<div class="flex min-h-screen">
+    <aside class="w-64 bg-gray-900 border-r border-gray-800 p-6">
+        <h2 class="text-2xl font-bold mb-8">IT System</h2>
 
-<div class="p-10">
-    <h1 class="text-2xl mb-6">System Monitor</h1>
+        <nav class="space-y-3 text-sm">
+            <a href="/" class="block hover:text-blue-400">Dashboard</a>
+            <a href="/create" class="block hover:text-blue-400">Create Ticket</a>
+            <a href="/monitor" class="block text-blue-400 font-semibold">Monitor</a>
+            <a href="/logs" class="block hover:text-blue-400">Logs</a>
+        </nav>
+    </aside>
 
-    <canvas id="chart"></canvas>
+    <main class="flex-1 p-8">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-3xl font-bold">Live System Monitor</h1>
+                <p class="text-gray-400 mt-1">Auto-refreshing every 2 seconds</p>
+            </div>
+            <a href="/" class="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg">Back</a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <p class="text-gray-400 text-sm">CPU</p>
+                <p id="cpuText" class="text-3xl font-bold mt-2">0%</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <p class="text-gray-400 text-sm">Memory</p>
+                <p id="memoryText" class="text-3xl font-bold mt-2">0%</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <p class="text-gray-400 text-sm">Disk</p>
+                <p id="diskText" class="text-3xl font-bold mt-2">0%</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <p class="text-gray-400 text-sm">Running Processes</p>
+                <p id="procText" class="text-3xl font-bold mt-2">0</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <h2 class="text-xl font-semibold mb-4">Live Usage Chart</h2>
+                <canvas id="usageChart" height="140"></canvas>
+            </div>
+
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <h2 class="text-xl font-semibold mb-4">Top Processes</h2>
+                <div id="processList" class="space-y-3"></div>
+            </div>
+        </div>
+    </main>
 </div>
 
 <script>
-const ctx = document.getElementById('chart');
+const ctx = document.getElementById('usageChart');
 
-new Chart(ctx, {
-    type: 'bar',
+const chart = new Chart(ctx, {
+    type: 'line',
     data: {
         labels: ['CPU', 'Memory', 'Disk'],
         datasets: [{
             label: 'Usage %',
-            data: [{{ cpu }}, {{ memory }}, {{ disk }}]
+            data: [0, 0, 0],
+            borderColor: '#60a5fa',
+            backgroundColor: 'rgba(96,165,250,0.2)',
+            tension: 0.35
         }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { labels: { color: '#fff' } }
+        },
+        scales: {
+            x: { ticks: { color: '#fff' }, grid: { color: '#374151' } },
+            y: { ticks: { color: '#fff' }, grid: { color: '#374151' }, beginAtZero: true, max: 100 }
+        }
     }
 });
-</script>
 
+async function refreshMetrics() {
+    const response = await fetch('/api/metrics');
+    const data = await response.json();
+
+    document.getElementById('cpuText').innerText = data.cpu.toFixed(1) + '%';
+    document.getElementById('memoryText').innerText = data.memory.toFixed(1) + '%';
+    document.getElementById('diskText').innerText = data.disk.toFixed(1) + '%';
+    document.getElementById('procText').innerText = data.process_count;
+
+    chart.data.datasets[0].data = [data.cpu, data.memory, data.disk];
+    chart.update();
+
+    const processList = document.getElementById('processList');
+    processList.innerHTML = '';
+
+    data.top_processes.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'bg-gray-800 rounded-xl p-4 border border-gray-700';
+        item.innerHTML = `
+            <div class="flex justify-between">
+                <div>
+                    <p class="font-semibold">${p.name}</p>
+                    <p class="text-sm text-gray-400">PID: ${p.pid}</p>
+                </div>
+                <div class="text-right text-sm">
+                    <p>CPU: ${p.cpu}%</p>
+                    <p>RAM: ${p.memory}%</p>
+                </div>
+            </div>
+        `;
+        processList.appendChild(item);
+    });
+}
+
+refreshMetrics();
+setInterval(refreshMetrics, 2000);
+</script>
 </body>
 </html>
